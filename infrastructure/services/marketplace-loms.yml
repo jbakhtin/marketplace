@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketplace-loms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: marketplace-loms
+  template:
+    metadata:
+      labels:
+        app: marketplace-loms
+    spec:
+      containers:
+        - name: marketplace-loms
+          image: ghcr.io/jbakhtin/marketplace-loms:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+      imagePullSecrets:
+        - name: ghcr-secret
+      volumes:
+        - name: varlog
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: marketplace-loms-load-balancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: marketplace-loms
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080
