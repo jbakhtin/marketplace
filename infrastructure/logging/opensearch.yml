@@ -20,12 +20,6 @@ items:
             - name: opensearch
               image: opensearchproject/opensearch:2.11.1
               env:
-                - name: discovery.type
-                  value: "single-node"
-                - name: plugins.security.ssl.http.enabled
-                  value: "false"
-                - name: plugins.security.ssl.transport.enabled
-                  value: "false"
                 - name: DISABLE_SECURITY_PLUGIN
                   value: "true"
               ports:
